@@ -1,0 +1,46 @@
+{
+  "required": true,
+  "package": "meow.binary.scavenger.mixin",
+  "compatibilityLevel": "JAVA_${java_version}",
+  "minVersion": "0.8",
+  "client": [
+    "CreateWorldScreenAccessor",
+    "CreateWorldScreenMixin",
+    "DeathScreenInvoker",
+    "DeathScreenMixin",
+    "ImageButtonAccessor",
+    "MinecraftMixin",
+    "PauseScreenMixin",
+    "ScreenInvoker",
+    "TitleScreenMixin",
+    "ToastManagerAccessor",
+        "ToastInstanceAccessor",
+    "WorldListEntryMixin",
+    "modifier.CakeBlockMixin",
+    "modifier.CameraTypeMixin",
+    "modifier.ContainerScreenMixin",
+    "modifier.FearfulMixin",
+    "modifier.FoodMixin",
+    "modifier.MouseHandlerMixin",
+    "modifier.MouseSettingsScreenMixin",
+    "OptionsSubScreenAccessor",
+    "modifier.OptionsMixin",
+    "modifier.PreventSprintingMixin",
+    "modifier.RemoveRecipeBookMixin",
+    "modifier.ScreenMixin",
+    "modifier.SoundEngineMixin"
+  ],
+  "mixins": [
+    "ServerLevelAccessor",
+    "modifier.LivingEntityMixin",
+    "modifier.OnlyHotbarMixin",
+    "modifier.PreventClicksMixin",
+    "modifier.ShuffledChestsMixin",
+    "modifier.SlotMixin",
+    "modifier.VillagerLevelMixin",
+    "modifier.VillagerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
