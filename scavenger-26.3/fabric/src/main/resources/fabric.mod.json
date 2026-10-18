@@ -1,0 +1,35 @@
+{
+    "schemaVersion": 1,
+    "id": "${mod_id}",
+    "version": "${version}",
+    "name": "${mod_name}",
+    "description": "${description}",
+    "authors": [
+        "${mod_author}"
+    ],
+    "contact": {
+        "issues": "https://github.com/catboybinary/scavenger/issues",
+        "sources": "https://github.com/catboybinary/scavenger"
+    },
+    "license": "${license}",
+    "icon": "assets/scavenger/icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "meow.binary.scavenger.fabric.ScavengerFabric"
+        ],
+        "client": [
+            "meow.binary.scavenger.fabric.client.ScavengerFabricClient"
+        ]
+    },
+    "mixins": [
+        "${mod_id}.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=${fabric_loader_version}",
+        "fabric-api": "*",
+        "minecraft": "~${minecraft_version}",
+        "java": ">=${java_version}",
+        "shatterlib": "*"
+    }
+}
