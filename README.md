@@ -30,7 +30,21 @@
 5. После синка в `Run/Debug Configurations` появятся **Minecraft Client** и **Minecraft Server** для подпроектов `:fabric` и `:neoforge` — запуск из IDE создаёт `fabric/run/` или `neoforge/run/`. Fabric API, Architectury и OctoLib уже в dev-класспасе (`modImplementation`), докладывать их руками не нужно.
 6. Сборка: `./gradlew build` → `fabric/build/libs/scavenger-fabric-1.1.2+1.21.1.jar`, `neoforge/build/libs/scavenger-neoforge-1.1.2+1.21.1.jar` (публиковать обычный jar, не `-dev-shadow` и не `-sources`).
 
-Если синк падает — см. таблицу типичных ошибок в [`scavenger-1.21.1/PORT_NOTES.md`](scavenger-1.21.1/PORT_NOTES.md).
+## Если синк или сборка падает
+
+| Ошибка | Причина → решение |
+| --- | --- |
+| `Unsupported class file major version 68/69`, `Invalid source release: 21` | Gradle запущен не на JDK 21 → `Settings → Build Tools → Gradle → Gradle JVM` поставить на 21 |
+| `Could not resolve dev.architectury.loom:1.13-SNAPSHOT` | недоступен `maven.architectury.dev` (SNAPSHOT-репозиторий) → попробовать в `build.gradle` версии `1.11-SNAPSHOT`, `1.10-SNAPSHOT`, `1.9-SNAPSHOT` и повторить с `--refresh-dependencies` |
+| `Could not find it.hurts.octostudios.octolib:octolib-{common,fabric,neoforge}:0.6.2+1.21` | недоступен `maven.octo-studios.com/releases` → взять другую версию (`0.6.1+1.21`, `0.6.0.3+1.21`) или подложить jar OctoLib в `libs/` и заменить зависимость на `files(...)` |
+| `Could not find net.neoforged:neoforge:21.1.209` | недоступен `maven.neoforged.net/releases` → любая `21.1.x` из списка NeoForge для 1.21.1 |
+| `Could not find org.parchmentmc.data:parchment-1.21.1:2024.11.17@zip` | недоступен `maven.parchmentmc.org` → заменить блок `mappings` на `mappings loom.officialMojangMappings()` (Parchment — только имена параметров, на работу не влияет) |
+| `OutOfMemoryError` / `GC overhead limit exceeded` при декомпиляции | `-Xmx3G` в `gradle.properties` (уже выставлено), закрыть другие проекты IDEA |
+| Не появились run-конфиги `Minecraft Client/Server` | не отработал `platformSetupLoomIde()` → удалить `.idea/` и `.gradle/`, переоткрыть проект, повторить sync |
+| Ошибки компиляции в Java-коде | ожидаемо: порт писался без компилятора. Прогнать `./gradlew build --console=plain 2>&1 \| tee build.log` и править по логу |
+| IDEA подсвечивает `@Mixin`-цели красным, но Gradle собирается | норма: IDE не знает про ремаппинг Loom; доверять выводу `./gradlew build` |
+
+Описание самого переноса (замены API, модификаторы, миксины, риски) — в [`scavenger-1.21.1/PORT_NOTES.md`](scavenger-1.21.1/PORT_NOTES.md).
 
 ## Что перенесено
 
