@@ -1,0 +1,48 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+issueTrackerURL = "https://github.com/catboybinary/scavenger/issues"
+license = "GPL-3.0-or-later"
+
+[[mods]]
+modId = "scavenger"
+version = "${version}"
+displayName = "Scavenger"
+authors = "catboybinary (1.21.1 port by Shad11t)"
+description = '''
+A mod for interesting item speedruns with additional modifiers.
+
+Unofficial port of catboybinary's Scavenger to Minecraft 1.21.1 (Fabric + NeoForge).
+Original mod: https://github.com/catboybinary/scavenger (GPL-3.0).
+'''
+logoFile = "icon.png"
+
+[[dependencies.scavenger]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.scavenger]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,1.21.2)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.scavenger]]
+modId = "architectury"
+type = "required"
+versionRange = "[13.0.8,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.scavenger]]
+modId = "octolib"
+type = "required"
+versionRange = "[0.6.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[mixins]]
+config = "scavenger.mixins.json"
