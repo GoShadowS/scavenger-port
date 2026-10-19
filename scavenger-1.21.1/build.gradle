@@ -25,14 +25,18 @@ subprojects {
 
     repositories {
         // OctoLib (formerly ShatterLib) - the library Scavenger is built on top of.
+        // NOTE: maven.octo-studios.com is a dead/parked domain; OctoLib is served from
+        // maven.shatterbyte.com/releases (same URL the original 26.3 build-logic uses).
         maven {
-            name = 'OctoStudios'
-            url = 'https://maven.octo-studios.com/releases'
+            name = 'Shatterbyte'
+            url = 'https://maven.shatterbyte.com/releases'
+            content { includeGroup 'it.hurts.octostudios.octolib' }
         }
 
         maven {
             name = 'ParchmentMC'
             url = 'https://maven.parchmentmc.org'
+            content { includeGroup 'org.parchmentmc.data' }
         }
 
         maven {

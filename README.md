@@ -36,7 +36,8 @@
 | --- | --- |
 | `Unsupported class file major version 68/69`, `Invalid source release: 21` | Gradle запущен не на JDK 21 → `Settings → Build Tools → Gradle → Gradle JVM` поставить на 21 |
 | `Could not resolve dev.architectury.loom:1.13-SNAPSHOT` | недоступен `maven.architectury.dev` (SNAPSHOT-репозиторий) → попробовать в `build.gradle` версии `1.11-SNAPSHOT`, `1.10-SNAPSHOT`, `1.9-SNAPSHOT` и повторить с `--refresh-dependencies` |
-| `Could not find it.hurts.octostudios.octolib:octolib-{common,fabric,neoforge}:0.6.2+1.21` | недоступен `maven.octo-studios.com/releases` → взять другую версию (`0.6.1+1.21`, `0.6.0.3+1.21`) или подложить jar OctoLib в `libs/` и заменить зависимость на `files(...)` |
+| `Could not find it.hurts.octostudios.octolib:octolib-{common,fabric,neoforge}:0.6.2+1.21` | OctoLib лежит на `maven.shatterbyte.com/releases` (**не** `maven.octo-studios.com` — этот домен заброшен и паркуется, Gradle на нём виснет до таймаута) → взять другую версию (`0.6.1+1.21`, `0.6.0.3+1.21`) или подложить jar OctoLib в `libs/` и заменить зависимость на `files(...)` |
+| `Could not GET 'https://ww38.<какой-то-домен>/...' failed: Read timed out` | репозиторий мёртв/припаркован; таймаут Gradle считает фатальной ошибкой и не идёт к следующему репозиторию → убрать/заменить URL и ограничить репозитории фильтром `content { includeGroup ... }` |
 | `Could not find net.neoforged:neoforge:21.1.209` | недоступен `maven.neoforged.net/releases` → любая `21.1.x` из списка NeoForge для 1.21.1 |
 | `Could not find org.parchmentmc.data:parchment-1.21.1:2024.11.17@zip` | недоступен `maven.parchmentmc.org` → заменить блок `mappings` на `mappings loom.officialMojangMappings()` (Parchment — только имена параметров, на работу не влияет) |
 | `OutOfMemoryError` / `GC overhead limit exceeded` при декомпиляции | `-Xmx3G` в `gradle.properties` (уже выставлено), закрыть другие проекты IDEA |

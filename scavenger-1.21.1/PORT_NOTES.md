@@ -24,7 +24,7 @@ scavenger-1.21.1/
 architectury-plugin `3.4-SNAPSHOT`, shadow `8.1.1`, Gradle `8.12.1`) взяты из ветки `1.21.11` оригинала
 и из проекта relics — то есть из реально собирающихся проектов под 1.21.1.
 
-Репозитории, откуда порт тянет зависимости: `maven.octo-studios.com/releases` (OctoLib),
+Репозитории, откуда порт тянет зависимости: `maven.shatterbyte.com/releases` (OctoLib),
 `maven.parchmentmc.org`, `maven.neoforged.net/releases`, `maven.fabricmc.net`, `maven.architectury.dev`.
 
 ---
@@ -173,6 +173,6 @@ Access widener / access transformer не используются — везде
   письменное согласие автора.
 * **Minecraft EULA**: мод распространяется бесплатно, без пейволов и платного доступа.
 * **OctoLib / ShatterLib — All Rights Reserved.** Это только рантайм-зависимость: подключается из
-  `maven.octo-studios.com/releases` (или Modrinth/CurseForge), его код **нельзя** копировать в репозиторий
+  `maven.shatterbyte.com/releases` (или Modrinth/CurseForge), его код **нельзя** копировать в репозиторий
   или переупаковывать в jar. В `fabric.mod.json` / `neoforge.mods.toml` объявлена обязательная
   зависимость `octolib >= 0.6.0` и `architectury >= 13.0.8`.
