@@ -45,7 +45,7 @@
 | Ошибки компиляции в Java-коде | ожидаемо: порт писался без компилятора. Прогнать `./gradlew build --console=plain 2>&1 \| tee build.log` и править по логу |
 | IDEA подсвечивает `@Mixin`-цели красным, но Gradle собирается | норма: IDE не знает про ремаппинг Loom; доверять выводу `./gradlew build` |
 
-Описание самого переноса (замены API, модификаторы, миксины, риски) — в [`scavenger-1.21.1/PORT_NOTES.md`](scavenger-1.21.1/PORT_NOTES.md).
+Описание самого переноса (замены API, модификаторы, миксины, отличия от 26.3) — в [`scavenger-1.21.1/PORT_NOTES.md`](scavenger-1.21.1/PORT_NOTES.md).
 
 ## Что перенесено
 
@@ -53,10 +53,10 @@
 
 ## Лицензия и публикация
 
-Оригинал распространяется под **GPL-3.0-or-later** — порт разрешён без отдельного согласия автора при соблюдении условий лицензии (текст лицензии, указание авторства, пометка об изменениях, распространение исходников под той же лицензией). Подробнее — в [`scavenger-1.21.1/PORT_NOTES.md`](scavenger-1.21.1/PORT_NOTES.md#юридическая-часть).
+Оригинал распространяется под **GPL-3.0-or-later** — порт разрешён без отдельного согласия автора при соблюдении условий лицензии (текст лицензии, указание авторства, пометка об изменениях, распространение исходников под той же лицензией). Текст лицензии — в [`scavenger-1.21.1/LICENSE`](scavenger-1.21.1/LICENSE), уведомление об оригинале и ссылки на все площадки — в [`scavenger-1.21.1/README.md`](scavenger-1.21.1/README.md).
 
 ---
 
 ## English TL;DR
 
-Unofficial **Minecraft 1.21.1** port of `catboybinary/scavenger` (GPL-3.0), kept in a separate folder next to the untouched 26.3 sources. Fabric + NeoForge via Architectury, running on OctoLib 0.6.2. Feature-complete port; **not yet compiled** — see `scavenger-1.21.1/PORT_NOTES.md` for every API change and open risk. Publishing must credit the original author, keep the GPL-3.0 license and source link, and treat OctoLib as an external (all-rights-reserved) runtime dependency.
+Unofficial **Minecraft 1.21.1** port of `catboybinary/scavenger` (GPL-3.0), kept in a separate folder next to the untouched 26.3 sources. Fabric + NeoForge via Architectury, running on OctoLib 0.6.2. Feature-complete port; **not yet compiled** — see `scavenger-1.21.1/PORT_NOTES.md` for every API change and every known difference from 26.3. Publishing must credit the original author, keep the GPL-3.0 license and source link, and treat OctoLib as an external (all-rights-reserved) runtime dependency.

@@ -13,7 +13,7 @@
 >
 > The original mod and this port are licensed under **GPL-3.0**. All credit for the mod, its idea and its assets goes to catboybinary (and kompotikivun for idea & direction).
 >
-> For 1.21.1 you also need **Architectury API** and **OctoLib** (the successor of ShatterLib). Port details, changed APIs and build instructions: [`PORT_NOTES.md`](PORT_NOTES.md).
+> For 1.21.1 you also need **Architectury API** and **OctoLib** (the successor of ShatterLib). What exactly changed in the port — APIs, modifiers, mixins and known differences from 26.3: [`PORT_NOTES.md`](PORT_NOTES.md). Build steps and troubleshooting: [repository README](../README.md).
 >
 > ---
 >
