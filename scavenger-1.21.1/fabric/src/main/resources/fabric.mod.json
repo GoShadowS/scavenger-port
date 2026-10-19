@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "scavenger",
+  "version": "${version}",
+  "name": "Scavenger",
+  "description": "A mod for interesting item speedruns with additional modifiers.\n\nUnofficial port of catboybinary's Scavenger to Minecraft 1.21.1 (Fabric + NeoForge). Original mod: https://github.com/catboybinary/scavenger (GPL-3.0).",
+  "authors": [
+    "catboybinary"
+  ],
+  "contributors": [
+    "1.21.1 port by Shad11t"
+  ],
+  "contact": {
+    "issues": "https://github.com/catboybinary/scavenger/issues",
+    "sources": "https://github.com/catboybinary/scavenger"
+  },
+  "license": "GPL-3.0-or-later",
+  "icon": "assets/scavenger/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "meow.binary.scavenger.fabric.ScavengerFabric"
+    ],
+    "client": [
+      "meow.binary.scavenger.fabric.client.ScavengerFabricClient"
+    ]
+  },
+  "mixins": [
+    "scavenger.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "architectury": ">=13.0.8",
+    "octolib": ">=0.6.0",
+    "fabric-api": "*"
+  }
+}
