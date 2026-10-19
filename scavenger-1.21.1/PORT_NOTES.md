@@ -1,12 +1,12 @@
 # Заметки по порту Scavenger 26.3 → 1.21.1
 
-Документ описывает, **что именно** было изменено при переносе и **что проверить** при первой сборке.
+Документ описывает, **что именно и как** было изменено при переносе мода с Minecraft 26.3 на 1.21.1.
 Оригинал: <https://github.com/catboybinary/scavenger> (ветка `26.3`, GPL-3.0-or-later).
 Порт не изменял оригинальные исходники — они лежат рядом в `../scavenger-26.3/`.
 
 ---
 
-## 1. Структура и сборка
+## 1. Целевые версии и структура порта
 
 ```
 scavenger-1.21.1/
@@ -18,17 +18,14 @@ scavenger-1.21.1/
 └── neoforge/                    # точка входа NeoForge + META-INF/neoforge.mods.toml
 ```
 
-```bash
-cd scavenger-1.21.1
-./gradlew build          # fabric/build/libs/*.jar и neoforge/build/libs/*.jar
-```
+Версии, на которые делался перенос (в `gradle.properties`): `minecraft 1.21.1`, `architectury 13.0.8`,
+`fabric-loader 0.16.14`, `fabric-api 0.116.6+1.21.1`, `neoforge 21.1.209`, `octolib 0.6.2+1.21`,
+маппинги `mojang + parchment 1.21.1:2024.11.17`, Java 21. Версии тулчейна (loom `1.13-SNAPSHOT`,
+architectury-plugin `3.4-SNAPSHOT`, shadow `8.1.1`, Gradle `8.12.1`) взяты из ветки `1.21.11` оригинала
+и из проекта relics — то есть из реально собирающихся проектов под 1.21.1.
 
-Версии (в `gradle.properties`): `minecraft 1.21.1`, `architectury 13.0.8`, `fabric-loader 0.16.14`,
-`fabric-api 0.116.6+1.21.1`, `neoforge 21.1.209`, `octolib 0.6.2+1.21`,
-маппинги `mojang + parchment 1.21.1:2024.11.17`, Java 21.
-
-Репозитории: `maven.octo-studios.com/releases` (OctoLib), `maven.parchmentmc.org`, `maven.neoforged.net/releases`,
-`maven.fabricmc.net`, `maven.architectury.dev`.
+Репозитории, откуда порт тянет зависимости: `maven.octo-studios.com/releases` (OctoLib),
+`maven.parchmentmc.org`, `maven.neoforged.net/releases`, `maven.fabricmc.net`, `maven.architectury.dev`.
 
 ---
 
@@ -141,36 +138,27 @@ Access widener / access transformer не используются — везде
 
 ---
 
-## 6. Что проверить при первой сборке
+## 6. Особенности и незакрытые риски переноса
 
-1. `./gradlew build` — правки вносились по декомпилированным исходникам 1.21.1 без компилятора.
-2. Разрешится ли `dev.architectury.loom 1.13-SNAPSHOT` и `octolib-{common,fabric,neoforge}:0.6.2+1.21`
-   (версии взяты из ветки `1.21.11` оригинала и из проекта relics).
-3. `ScavengerConfigScreen` — новый код (в OctoLib 0.6.2 экрана конфига нет): вёрстка в две колонки,
+1. **Порт не компилировался.** Правки вносились по декомпилированным исходникам Minecraft 1.21.1
+   (Mojang-маппинги), исходникам OctoLib 0.6.2 и Architectury 13 — в среде без JDK, Gradle и доступа
+   к maven-репозиториям. Взамен прогнаны статические проверки: 0 неразрешённых импортов во всём `common`;
+   все цели `@Inject` / `@Redirect` / `@Accessor` / `@Invoker` / `@Shadow` в 30 миксинах существуют
+   в исходниках 1.21.1; `scavenger.mixins.json` ↔ файлы миксинов совпадают 1:1; все id в тегах предметов
+   валидны для 1.21.1; сверены сигнатуры `SavedData.Factory`, `GuiGraphics`, `Button.Builder`,
+   `Packet`/`NetworkManager` OctoLib, `Level.tickRateManager()` и остальных использованных методов.
+2. `ScavengerConfigScreen` — новый код (в OctoLib 0.6.2 экрана конфига нет): вёрстка в две колонки,
    страницы Timer / Wheels / Gameplay, «Сохранить» пишет YAML через `ConfigManager.uploadDataToConfig`,
    «Отменить» перечитывает файл через `ConfigManager.reload`.
-4. Нуар: `assets/scavenger/shaders/post/noir.json` + `OctoLibPostEffects.getPostEffects().put(...)`
+3. Нуар: `assets/scavenger/shaders/post/noir.json` + `OctoLibPostEffects.getPostEffects().put(...)`
    (порядок инициализации OctoLib/Scavenger не гарантирован, поэтому эффект кладётся сразу в активную карту).
-5. Блендинг подсветки колеса (`blitDodge`) — визуально сравнить с 26.x.
-6. История забегов: сид читается из `level.dat`, данные — из `<world>/data/scavenger_data.dat`
+4. Блендинг подсветки колеса (`blitDodge`) переносился «в лоб» через `RenderSystem.blendFunc` —
+   визуально может отличаться от 26.x.
+5. История забегов: сид читается из `level.dat`, данные — из `<world>/data/scavenger_data.dat`
    (миры, созданные на 26.x, порт не подхватит).
-7. `pack.mcmeta` → `pack_format: 34` (1.21.1).
-8. Ключи локализации для нового экрана конфига добавлены в `en_us.json` и `ru_ru.json`
+6. `pack.mcmeta` → `pack_format: 34` (1.21.1).
+7. Ключи локализации для нового экрана конфига добавлены в `en_us.json` и `ru_ru.json`
    (`uk_ua.json` возьмёт английский fallback).
-
-### Типичные ошибки сборки и что с ними делать
-
-| Ошибка | Причина → решение |
-| --- | --- |
-| `Unsupported class file major version 68/69`, `Invalid source release: 21` | Gradle запущен не на JDK 21 → `Settings → Build Tools → Gradle → Gradle JVM` поставить на 21 |
-| `Could not resolve dev.architectury.loom:1.13-SNAPSHOT` | недоступен `maven.architectury.dev` (SNAPSHOT-репозиторий) → попробовать в `build.gradle` версии `1.11-SNAPSHOT`, `1.10-SNAPSHOT`, `1.9-SNAPSHOT` и повторить с `--refresh-dependencies` |
-| `Could not find it.hurts.octostudios.octolib:octolib-{common,fabric,neoforge}:0.6.2+1.21` | недоступен `maven.octo-studios.com/releases` → взять другую версию (`0.6.1+1.21`, `0.6.0.3+1.21`) или подложить jar OctoLib в `libs/` и заменить зависимость на `files(...)` |
-| `Could not find net.neoforged:neoforge:21.1.209` | недоступен `maven.neoforged.net/releases` → любая `21.1.x` из списка NeoForge для 1.21.1 |
-| `Could not find org.parchmentmc.data:parchment-1.21.1:2024.11.17@zip` | недоступен `maven.parchmentmc.org` → заменить блок `mappings` на `mappings loom.officialMojangMappings()` (Parchment — только имена параметров, на работу не влияет) |
-| `OutOfMemoryError` / `GC overhead limit exceeded` при декомпиляции | `-Xmx3G` в `gradle.properties` (уже выставлено), закрыть другие проекты IDEA |
-| Не появились run-конфиги `Minecraft Client/Server` | не отработал `platformSetupLoomIde()` → удалить `.idea/` и `.gradle/`, переоткрыть проект, повторить sync |
-| Ошибки компиляции в Java-коде | ожидаемо: порт писался без компилятора. Прогнать `./gradlew build --console=plain 2>&1 | tee build.log` и править по логу |
-| IDEA подсвечивает `@Mixin`-цели красным, но Gradle собирается | норма: IDE не знает про ремаппинг Loom; доверять выводу `./gradlew build` |
 
 ---
 
