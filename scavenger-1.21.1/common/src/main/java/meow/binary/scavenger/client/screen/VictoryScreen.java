@@ -360,7 +360,7 @@ public class VictoryScreen extends Screen {
             return true;
         }
 
-        return super.mouseClicked(event, isDoubleClick);
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     /**

@@ -177,7 +177,7 @@ public class Modifiers {
             ResourceLocation.fromNamespaceAndPath(Scavenger.MOD_ID, "eclipse"),
             new ScavengerModifier(null, level -> {
                 disableDaylightCycle(level);
-                level.setDayTime(MIDNIGHT);
+                level.setDayTime(Modifiers.MIDNIGHT);
             })
     );
 
@@ -185,7 +185,7 @@ public class Modifiers {
             ResourceLocation.fromNamespaceAndPath(Scavenger.MOD_ID, "solstice"),
             new ScavengerModifier(null, level -> {
                 disableDaylightCycle(level);
-                level.setDayTime(NOON);
+                level.setDayTime(Modifiers.NOON);
             })
     );
 

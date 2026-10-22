@@ -60,7 +60,8 @@ public class ScavengerConfigScreen extends Screen {
         int centerX = this.width / 2;
         this.rowLabels.clear();
 
-        this.addRenderableWidget(CycleButton.builder(Page::label, this.page)
+        this.addRenderableWidget(CycleButton.<Page>builder(Page::label)
+                .withInitialValue(this.page)
                 .withValues(List.of(Page.values()))
                 .displayOnlyValue()
                 .create(centerX - 100, 20, 200, ROW_HEIGHT, Component.translatable("scavenger.config.page"), (button, value) -> {
@@ -161,7 +162,8 @@ public class ScavengerConfigScreen extends Screen {
     }
 
     private <E extends Enum<E>> RowFactory enumRow(String key, E value, Consumer<E> set, E[] values) {
-        return (x, y, width, height) -> this.addRenderableWidget(CycleButton.builder(ScavengerConfigScreen::enumLabel, value)
+        return (x, y, width, height) -> this.addRenderableWidget(CycleButton.<E>builder(ScavengerConfigScreen::enumLabel)
+                .withInitialValue(value)
                 .withValues(List.of(values))
                 .displayOnlyValue()
                 .create(x, y, width, height, Component.translatable(key), (button, newValue) -> set.accept(newValue)));
