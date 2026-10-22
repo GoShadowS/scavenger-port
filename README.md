@@ -14,7 +14,7 @@ Port of the **Scavenger** mod (by `catboybinary`, **GPL-3.0**) from Minecraft **
 * **Minecraft:** 1.21.1, **Java 21**, Mojang mappings + Parchment `1.21.1:2024.11.17`.
 * **Loaders:** Fabric (`fabric-loader 0.16.14`, `fabric-api 0.116.6+1.21.1`) and NeoForge (`21.1.209`).
 * **Dependencies:** [Architectury API](https://github.com/architectury/architectury-api) `13.0.8` and [OctoLib](https://github.com/Octo-Studios/octo-lib) `0.6.2+1.21` (the successor of ShatterLib, which the original is built on).
-* **Build:** `cd scavenger-1.21.1 && ./gradlew build` → `fabric/build/libs/scavenger-fabric-1.1.2+1.21.1.jar`, `neoforge/build/libs/scavenger-neoforge-1.1.2+1.21.1.jar`.
+* **Build:** `cd scavenger-1.21.1 && ./gradlew build` → `fabric/build/libs/scavenger-fabric-1.0.0+1.21.1.jar`, `neoforge/build/libs/scavenger-neoforge-1.0.0+1.21.1.jar`.
 
 > ⚠️ The port was written against decompiled Minecraft 1.21.1 sources (Mojang mappings), the OctoLib 0.6.2 sources and Architectury 13, but it was **never compiled** in the environment where it was made (no JDK/Gradle and no access to maven repositories). Run `./gradlew build` once before publishing — every rewritten spot and every judgement call is listed in [`scavenger-1.21.1/PORT_NOTES.md`](scavenger-1.21.1/PORT_NOTES.md).
 
@@ -28,7 +28,24 @@ Port of the **Scavenger** mod (by `catboybinary`, **GPL-3.0**) from Minecraft **
    * `Build and run using` / `Run tests using` → **Gradle**.
 4. `Reload All Gradle Projects` (the elephant icon). The first sync downloads Gradle, Minecraft 1.21.1 and the Mojang + Parchment mappings, then decompiles the client — 5–20 minutes and a few GB in `~/.gradle`.
 5. After the sync, `Run/Debug Configurations` contains **Minecraft Client** and **Minecraft Server** for the `:fabric` and `:neoforge` subprojects — launching from the IDE creates `fabric/run/` or `neoforge/run/`. Fabric API, Architectury and OctoLib are already on the dev classpath (`modImplementation`); there is nothing to drop in by hand.
-6. Build: `./gradlew build` → `fabric/build/libs/scavenger-fabric-1.1.2+1.21.1.jar`, `neoforge/build/libs/scavenger-neoforge-1.1.2+1.21.1.jar` (publish the plain jar, not `-dev-shadow` and not `-sources`).
+6. Build: `./gradlew build` → `fabric/build/libs/scavenger-fabric-1.0.0+1.21.1.jar`, `neoforge/build/libs/scavenger-neoforge-1.0.0+1.21.1.jar` (publish the plain jar, not `-dev-shadow` and not `-sources`).
+
+### Testing the mod from IDEA (no jar needed)
+
+Playing with the mod never requires `./gradlew build`. Loom generates dev run configurations, and IDEA
+compiles only what changed (a few seconds) straight into `common/build/classes` — no jar, no remapping:
+
+* **Run → Run/Debug Configurations → Minecraft Client** (the `:fabric` or `:neoforge` one) → Run or Debug; or
+* Gradle panel → `fabric → Tasks → loom → runClient` (same for `neoforge`); or
+* a terminal: `.\gradlew.bat :fabric:runClient` / `:neoforge:runClient`.
+
+The first launch creates `fabric/run/` (or `neoforge/run/`) with its own dev world, options and logs —
+`run/logs/latest.log` is the file to send when something crashes. Fabric API, Architectury and OctoLib are
+already on the dev classpath (`modImplementation`), so nothing needs to be copied into `run/mods/`.
+Resources (lang files, textures) reload in game with **F3+T**; code changes need the run configuration restarted.
+
+Do not run a build from IDEA and from a terminal at the same time: two Gradle invocations fight over the same
+`build/` directories and fail with `Unable to delete directory`.
 
 ## If the sync or the build fails
 
@@ -49,7 +66,7 @@ The description of the port itself (API replacements, modifiers, mixins, differe
 
 ## What was ported
 
-The full 1.1.2 feature set: the item and modifier wheels, the victory screen, the HUD timer (toast-aware), run history plus the details screen, manual item/modifier selection, 33 modifiers, "tourist" (a random language), the noir post effect, world re-creation after a hardcore death, the seed on the victory screen and in run history, and the ru/uk localizations.
+The full feature set of the original 1.1.2 release (the port itself is versioned **1.0.0**): the item and modifier wheels, the victory screen, the HUD timer (toast-aware), run history plus the details screen, manual item/modifier selection, 33 modifiers, "tourist" (a random language), the noir post effect, world re-creation after a hardcore death, the seed on the victory screen and in run history, and the ru/uk localizations.
 
 ## License and publishing
 

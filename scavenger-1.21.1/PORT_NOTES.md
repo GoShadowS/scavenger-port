@@ -104,7 +104,7 @@ The HUD and the client tick are no longer split per loader: the common code uses
 | TURTLE / SONIC | redirect of `OptionInstance.get()` in `MouseHandler.turnPlayer` | the same (ordinal 0 — sensitivity) |
 | DRUNK | inverts X and Y through the options | 1.21.1 has no "invert mouse X" → redirect of `invertYMouse().get()` (ordinal 1) plus inverting `accumulatedDX` at HEAD of `turnPlayer` (vanilla zeroes the field right after) |
 | VEGETARIAN / CARNIVORE | `Consumable.canConsume` | HEAD of `Item.use(Level, Player, InteractionHand)` → `InteractionResultHolder.pass(stack)`; tags `scavenger:vegetarian_food`, `minecraft:meat`, `minecraft:fishes` |
-| SNAIL | `Player.isMobilityRestricted` | HEAD of `Player.setSprinting(true)` → cancel |
+| SNAIL | `Player.isMobilityRestricted` | HEAD of `LivingEntity.setSprinting(true)` → cancel, guarded by `instanceof Player` (`setSprinting` is declared by `LivingEntity`, not `Player`) |
 | INSOMNIA | `Player.startSleepInBed(bed, state, BedRule, pos)` + its own `BedSleepingProblem` | `startSleepInBed(BlockPos)`; `BedSleepingProblem` is an enum in 1.21.1, so `OTHER_PROBLEM` is used and the `scavenger.insomnia` text is shown in the action bar |
 | SPEED_UP | `level.tickRateManager().setTickRate(40)` | unchanged |
 | ECLIPSE / SOLSTICE | `clockManager().moveToTimeMarker(...)` | `setDayTime(18000)` / `setDayTime(6000)` + disabling `doDaylightCycle` |
@@ -124,7 +124,7 @@ The HUD and the client tick are no longer split per loader: the common code uses
 `OptionsSubScreenAccessor`, `PauseScreenMixin`, `ScreenInvoker`, `TitleScreenMixin`, `ToastComponentAccessor`,
 `ToastInstanceAccessor`, `WorldListEntryMixin`, `modifier.{CameraType, ContainerScreen, Food, MouseHandler,
 MouseSettingsScreen, Options, RemoveRecipeBook, Screen, SoundEngine}Mixin`.
-Common: `modifier.{CakeBlock, Fearful, LivingEntity, OnlyHotbar, PreventSprinting, ShuffledChests, Slot,
+Common: `modifier.{CakeBlock, Fearful, Insomnia, LivingEntity, OnlyHotbar, ShuffledChests, Slot,
 VillagerLevel, Villager}Mixin`.
 
 Removed: `ServerLevelAccessor` (1.21.1 has `Level.getServer()`) and the empty `PreventClicksMixin`.
@@ -135,6 +135,12 @@ Details:
   added to the grid as its own full-width row (injection into `GridLayout.arrangeElements()`).
 * `WorldSelectionList.WorldListEntry.summary` is a package-private field, obtained through `@Shadow`.
 * `Screen.addRenderableWidget` is protected → called through `ScreenInvoker` from mixins in other packages.
+* An injection must target the class that **declares** the method: the old `PreventSprintingMixin` injected
+  `setSprinting` into `@Mixin(Player.class)`, but that method is declared by `LivingEntity`, so the refmap
+  remapper reported `Cannot remap setSprinting ... does not exists in any of the targets [Player]` and the
+  production (intermediary) jar would have lost the mapping. SNAIL now injects into `LivingEntityMixin` with
+  an `instanceof Player` guard, and the remaining INSOMNIA injection lives in `InsomniaMixin`
+  (`startSleepInBed` is declared by `Player`).
 
 ---
 

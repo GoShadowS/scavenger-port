@@ -30,9 +30,9 @@
   "mixins": [
     "modifier.CakeBlockMixin",
     "modifier.FearfulMixin",
+    "modifier.InsomniaMixin",
     "modifier.LivingEntityMixin",
     "modifier.OnlyHotbarMixin",
-    "modifier.PreventSprintingMixin",
     "modifier.ShuffledChestsMixin",
     "modifier.SlotMixin",
     "modifier.VillagerLevelMixin",
