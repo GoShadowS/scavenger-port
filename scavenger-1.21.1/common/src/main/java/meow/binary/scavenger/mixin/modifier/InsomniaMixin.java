@@ -9,33 +9,23 @@ import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+/**
+ * INSOMNIA. {@code startSleepInBed} only takes the bed position in 1.21.1, and
+ * {@code Player.BedSleepingProblem} is a plain enum, so the custom reason from 26.x cannot be added -
+ * the vanilla {@code OTHER_PROBLEM} is used and the message is shown by hand.
+ * <p>
+ * The SNAIL half of the old {@code PreventSprintingMixin} moved to {@link LivingEntityMixin}, because
+ * {@code setSprinting} is declared by {@code LivingEntity} and mixin refmaps cannot remap a target
+ * method that the mixin's own target class merely inherits.
+ */
 @Mixin(Player.class)
-public abstract class PreventSprintingMixin {
-    /**
-     * SNAIL. 26.x hooked {@code Player#isMobilityRestricted}, that method does not exist in 1.21.1,
-     * so sprinting is cancelled directly instead.
-     */
-    @Inject(method = "setSprinting", at = @At("HEAD"), cancellable = true)
-    private void scavenger$preventSprinting(boolean sprinting, CallbackInfo ci) {
-        if (sprinting) {
-            Player player = (Player) (Object) this;
-            if (Modifiers.isActive(Modifiers.SNAIL, player.level())) {
-                ci.cancel();
-            }
-        }
-    }
-
-    /**
-     * INSOMNIA. {@code startSleepInBed} only takes the bed position in 1.21.1.
-     */
+public abstract class InsomniaMixin {
     @Inject(method = "startSleepInBed", at = @At("HEAD"), cancellable = true)
     private void scavenger$cancelSleep(BlockPos pos, CallbackInfoReturnable<Either<Player.BedSleepingProblem, Unit>> cir) {
         Player player = (Player) (Object) this;
         if (Modifiers.isActive(Modifiers.INSOMNIA, player.level())) {
-            // BedSleepingProblem is an enum in 1.21.1, so the custom message is shown by hand.
             player.displayClientMessage(Scavenger.INSOMNIA_MESSAGE, true);
             cir.setReturnValue(Either.left(Scavenger.INSOMNIA_PROBLEM));
         }
