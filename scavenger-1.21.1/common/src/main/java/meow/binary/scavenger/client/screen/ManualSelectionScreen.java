@@ -52,7 +52,8 @@ public class ManualSelectionScreen extends Screen {
         this.addRenderableWidget(this.itemIdBox);
 
         this.modifierButton = this.addRenderableWidget(
-                CycleButton.builder(Modifiers::getName, parent.getChosenModifier())
+                CycleButton.<ResourceLocation>builder(Modifiers::getName)
+                        .withInitialValue(parent.getChosenModifier())
                         .withValues(this.modifiers)
                         .displayOnlyValue()
                         .create(panelX + 20, panelY + 88, panelWidth - 40, 20, Component.translatable("scavenger.modifier_id"), (button, value) -> {

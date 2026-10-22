@@ -65,7 +65,7 @@ public abstract class WorldListEntryMixin {
 
         tooltip.add(Component.translatable("scavenger.item_to_find")
                 .append(": ")
-                .append(itemName.withStyle(ChatFormatting.BOLD)));
+                .append(itemName.copy().withStyle(ChatFormatting.BOLD)));
         tooltip.add(Component.translatable("scavenger.active_modifier")
                 .append(": ")
                 .append(Modifiers.getName(tooltipData.modifierId()).withStyle(ChatFormatting.BOLD)));
