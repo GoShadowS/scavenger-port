@@ -9,6 +9,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -98,11 +99,14 @@ public class ScavengerConfigScreen extends Screen {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
         for (RowLabel rowLabel : this.rowLabels) {
             guiGraphics.drawString(this.font, rowLabel.label(), rowLabel.x(), rowLabel.y(), 0xffdddddd, false);
         }
 
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        for (Renderable renderable : this.renderables) {
+            renderable.render(guiGraphics, mouseX, mouseY, partialTick);
+        }
         guiGraphics.drawCenteredString(this.font, Component.translatable("scavenger.config.lists_hint"),
                 this.width / 2, this.height - 40, 0xff999999);
     }

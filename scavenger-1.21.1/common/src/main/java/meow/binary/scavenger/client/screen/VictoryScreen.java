@@ -14,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.Tooltip;
 import com.mojang.math.Axis;
 import net.minecraft.client.gui.screens.GenericMessageScreen;
@@ -120,6 +121,9 @@ public class VictoryScreen extends Screen {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        // 1.21.1: Screen.render() blurs the background before widgets, so the blur
+        // pass must happen first - anything drawn before it gets smeared.
+        this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
         renderBackdrop(guiGraphics);
 
         Font font = Minecraft.getInstance().font;
@@ -135,7 +139,9 @@ public class VictoryScreen extends Screen {
         renderTitle(guiGraphics, font, panelY+8);
         renderResult(guiGraphics, font, panelX, panelY);
         renderSeed(guiGraphics, font, mouseX, mouseY);
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        for (Renderable renderable : this.renderables) {
+            renderable.render(guiGraphics, mouseX, mouseY, partialTick);
+        }
 
         guiGraphics.pose().popPose();
     }

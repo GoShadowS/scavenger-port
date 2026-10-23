@@ -141,6 +141,10 @@ Details:
   production (intermediary) jar would have lost the mapping. SNAIL now injects into `LivingEntityMixin` with
   an `instanceof Player` guard, and the remaining INSOMNIA injection lives in `InsomniaMixin`
   (`startSleepInBed` is declared by `Player`).
+* In 1.21.1 `Screen.render()` blurs the background **before** rendering widgets, so every ported screen draws
+  in the order `renderBackground(...)` → own content → the `renderables` loop. Text drawn before the
+  background pass ends up inside the blur target and comes out smeared (this is what the 26.3 ordering,
+  draw-then-`super.render()`, produces on 1.20.2+).
 
 ---
 

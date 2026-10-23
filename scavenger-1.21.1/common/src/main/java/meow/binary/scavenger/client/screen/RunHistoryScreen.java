@@ -7,6 +7,7 @@ import meow.binary.scavenger.client.screen.widget.RunRecordWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -127,6 +128,7 @@ public class RunHistoryScreen extends Screen {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
         guiGraphics.fill(0, 0, this.width, this.height, 0x99000000);
         guiGraphics.fillGradient(0, 0, this.width, this.height, 0x55fdcd23, 0x11000000);
         //guiGraphics.fill(0, 0, this.width, this.height, 0x77000000);
@@ -159,7 +161,9 @@ public class RunHistoryScreen extends Screen {
                     headerY, 0xffffcc00, false);
         }
 
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        for (Renderable renderable : this.renderables) {
+            renderable.render(guiGraphics, mouseX, mouseY, partialTick);
+        }
     }
 
     @Override

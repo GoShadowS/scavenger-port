@@ -6,6 +6,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -104,7 +105,7 @@ public class ManualSelectionScreen extends Screen {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        //this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
+        this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
 
         int panelWidth = 320;
         int panelHeight = 180;
@@ -130,7 +131,9 @@ public class ManualSelectionScreen extends Screen {
         guiGraphics.drawString(this.font, itemStatus, panelX + 20, panelY + 56, 0xffffffff, false);
         guiGraphics.drawString(this.font, modifierStatus, panelX + 20, panelY + 110, 0xffffffff, false);
 
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        for (Renderable renderable : this.renderables) {
+            renderable.render(guiGraphics, mouseX, mouseY, partialTick);
+        }
         if (this.validItem) {
             guiGraphics.renderItem(this.resolvedItem.getDefaultInstance(), panelX + panelWidth - 38, panelY + 36);
         }
