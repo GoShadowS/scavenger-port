@@ -10,6 +10,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -104,8 +105,12 @@ public class ScavengerConfigScreen extends Screen {
             guiGraphics.drawString(this.font, rowLabel.label(), rowLabel.x(), rowLabel.y(), 0xffdddddd, false);
         }
 
-        for (Renderable renderable : this.renderables) {
-            renderable.render(guiGraphics, mouseX, mouseY, partialTick);
+        // The widget list field of Screen is private in 1.21.1; every widget here is
+        // added through addRenderableWidget, so children() holds exactly that list.
+        for (GuiEventListener child : this.children()) {
+            if (child instanceof Renderable renderable) {
+                renderable.render(guiGraphics, mouseX, mouseY, partialTick);
+            }
         }
         guiGraphics.drawCenteredString(this.font, Component.translatable("scavenger.config.lists_hint"),
                 this.width / 2, this.height - 40, 0xff999999);

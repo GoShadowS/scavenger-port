@@ -7,6 +7,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -131,8 +132,12 @@ public class ManualSelectionScreen extends Screen {
         guiGraphics.drawString(this.font, itemStatus, panelX + 20, panelY + 56, 0xffffffff, false);
         guiGraphics.drawString(this.font, modifierStatus, panelX + 20, panelY + 110, 0xffffffff, false);
 
-        for (Renderable renderable : this.renderables) {
-            renderable.render(guiGraphics, mouseX, mouseY, partialTick);
+        // The widget list field of Screen is private in 1.21.1; every widget here is
+        // added through addRenderableWidget, so children() holds exactly that list.
+        for (GuiEventListener child : this.children()) {
+            if (child instanceof Renderable renderable) {
+                renderable.render(guiGraphics, mouseX, mouseY, partialTick);
+            }
         }
         if (this.validItem) {
             guiGraphics.renderItem(this.resolvedItem.getDefaultInstance(), panelX + panelWidth - 38, panelY + 36);
