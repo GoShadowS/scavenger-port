@@ -15,6 +15,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.components.Tooltip;
 import com.mojang.math.Axis;
 import net.minecraft.client.gui.screens.GenericMessageScreen;
@@ -139,8 +140,12 @@ public class VictoryScreen extends Screen {
         renderTitle(guiGraphics, font, panelY+8);
         renderResult(guiGraphics, font, panelX, panelY);
         renderSeed(guiGraphics, font, mouseX, mouseY);
-        for (Renderable renderable : this.renderables) {
-            renderable.render(guiGraphics, mouseX, mouseY, partialTick);
+        // The widget list field of Screen is private in 1.21.1; every widget here is
+        // added through addRenderableWidget, so children() holds exactly that list.
+        for (GuiEventListener child : this.children()) {
+            if (child instanceof Renderable renderable) {
+                renderable.render(guiGraphics, mouseX, mouseY, partialTick);
+            }
         }
 
         guiGraphics.pose().popPose();
