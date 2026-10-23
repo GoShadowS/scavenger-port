@@ -29,6 +29,7 @@ repositories {
         name = 'NeoForged'
         url = 'https://maven.neoforged.net/releases'
     }
+    mavenCentral()
 }
 
 dependencies {
@@ -38,6 +39,12 @@ dependencies {
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
+
+    // OctoLib's ConfigManager uses SnakeYAML at runtime. The Fabric artifact of OctoLib
+    // bundles it, the NeoForge one does not, so the consuming mod must provide it:
+    // on the dev classpath and inside the shipped jar.
+    implementation "org.yaml:snakeyaml:2.2"
+    shadowBundle "org.yaml:snakeyaml:2.2"
 }
 
 processResources {
@@ -51,6 +58,8 @@ processResources {
 shadowJar {
     configurations = [project.configurations.shadowBundle]
     archiveClassifier = 'dev-shadow'
+    // never let a bundled library's module-info turn the mod jar into a named module
+    exclude('module-info.class')
 }
 
 remapJar {
